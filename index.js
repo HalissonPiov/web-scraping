@@ -1,16 +1,18 @@
 const scrapeKabum = require('./scrapers/kabum');
+const scrapePichau = require('./scrapers/pichau');
+const scrapeTerabyte = require('./scrapers/terabyte');
 const salvarCsv = require('./utils/salvarCsv');
-const cron = require('node-cron');
 
 async function coletarDados() {
   console.log('[INFO] Iniciando scraping...');
-  const kabum = await scrapeKabum();
-  await salvarCsv(kabum, './data/historico.csv');
-  console.log(`[INFO] ${kabum.length} produtos salvos da Kabum.`);
+  const [kabum, pichau, terabyte] = await Promise.all([
+    scrapeKabum(),
+    scrapePichau(),
+    scrapeTerabyte()
+  ]);
+
+  const todosProdutos = [...kabum, ...pichau, ...terabyte];
+
+  await salvarCsv(todosProdutos, './data/historico.csv');
+  console.log(`[INFO] ${todosProdutos.length} produtos salvos.`);
 }
-
-cron.schedule('0 10 * * *', () => {
-  coletarDados(); // executa todo dia às 10:00h
-});
-
-coletarDados(); 
