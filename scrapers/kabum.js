@@ -11,7 +11,7 @@ async function scrapeKabum() {
     const nome = $(el).find('.nameCard').text().trim();
     const preco = $(el).find('.priceCard').text().replace('R$', '').trim();
     const link = 'https://www.kabum.com.br' + $(el).find('a').attr('href');
-    const marca = nome.split(' ')[0]; // simplificação da marca
+    const marca = nome.split(' ')[0]; 
 
     if (nome && preco) {
       produtos.push({ nome, preco, marca, link, site: 'Kabum', data: new Date().toISOString() });
