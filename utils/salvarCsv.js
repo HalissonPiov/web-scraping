@@ -1,5 +1,5 @@
-const fs = require('fs');
-const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+import { existsSync } from 'fs';
+import { createObjectCsvWriter as createCsvWriter } from 'csv-writer';
 
 async function salvarCsv(dados, caminho) {
   const csvWriter = createCsvWriter({
@@ -12,10 +12,10 @@ async function salvarCsv(dados, caminho) {
       { id: 'site', title: 'Site' },
       { id: 'data', title: 'Data' },
     ],
-    append: fs.existsSync(caminho),
+    append: existsSync(caminho),
   });
 
   await csvWriter.writeRecords(dados);
 }
 
-module.exports = salvarCsv;
+export default salvarCsv;
