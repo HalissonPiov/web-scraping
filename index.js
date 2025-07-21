@@ -1,32 +1,38 @@
 import scrapeKabum from './scrapers/kabum.js';
-import scrapePichau from './scrapers/pichau.js';
-import scrapeTerabyte from './scrapers/terabyte.js';
+import scrapeMercadoLivre from './scrapers/mercadolivre.js';
 import salvarCsv from './utils/salvarCsv.js';
 
-async function coletarDados() {
-  console.log('[INFO] Iniciando scraping...');
+async function main() {
+  console.log('🔧 Hardware Price Tracker v2.0 - TESTE FINAL');
+  console.log('Sistema de monitoramento de preços de hardware\n');
+  
+  const allProducts = [];
   
   try {
-
-    const kabum = await scrapeKabum();
-    await new Promise(resolve => setTimeout(resolve, 2000)); 
+    // Teste Kabum
+    console.log('1. Coletando do Kabum...');
+    const kabumProducts = await scrapeKabum();
+    allProducts.push(...kabumProducts);
+    console.log(`✅ Kabum: ${kabumProducts.length} produtos`);
     
-    const pichau = await scrapePichau();
-    await new Promise(resolve => setTimeout(resolve, 2000)); 
+    // Teste Mercado Livre 
+    console.log('\n2. Coletando do Mercado Livre...');
+    const mlProducts = await scrapeMercadoLivre();
+    allProducts.push(...mlProducts);
+    console.log(`✅ Mercado Livre: ${mlProducts.length} produtos`);
     
-    const terabyte = await scrapeTerabyte();
-
-    const todosProdutos = [...kabum, ...pichau, ...terabyte];
-
-    if (todosProdutos.length > 0) {
-      await salvarCsv(todosProdutos, './data/historico.csv');
-      console.log(`[INFO] ${todosProdutos.length} produtos salvos no arquivo CSV.`);
-    } else {
-      console.log('[AVISO] Nenhum produto foi coletado dos sites.');
-    }
+    // Salvar como historico.csv
+    console.log(`\n3. Salvando ${allProducts.length} produtos no historico.csv...`);
+    await salvarCsv(allProducts, 'historico');
+    
+    console.log('\n🎯 Primeiros produtos encontrados:');
+    allProducts.slice(0, 6).forEach((p, i) => {
+      console.log(`  ${i + 1}. ${p.name} - ${p.price} (${p.site})`);
+    });
+    
   } catch (error) {
-    console.error('[ERRO] Erro durante a coleta de dados:', error.message);
+    console.error('❌ Erro:', error);
   }
 }
 
-coletarDados().catch(console.error);
+main();
