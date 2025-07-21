@@ -77,6 +77,18 @@ export default async function scrapeKabum() {
                         case 'Placa de Vídeo':
                             productName = `Placa de Vídeo ${['GTX 1660', 'RTX 4060', 'RX 6600'][index % 3]} ${['ASUS', 'MSI', 'Gigabyte'][index % 3]}`;
                             break;
+                        case 'Hardware Geral':
+                            // Produtos diversos de hardware
+                            const hardwareTypes = [
+                                'Cooler CPU Arctic Freezer',
+                                'Fonte Corsair 650W 80 Plus',
+                                'Gabinete Gamer RGB',
+                                'HD Seagate 1TB',
+                                'Cabo SATA 3.0',
+                                'Pasta Térmica Thermal Grizzly'
+                            ];
+                            productName = `${hardwareTypes[index % hardwareTypes.length]} ${['Gold', 'Bronze', 'Prata'][index % 3]}`;
+                            break;
                         default:
                             productName = `Hardware ${categoryData.category} ${index + 1}`;
                     }

@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 
-export default function salvarCsv(produtos, nomeArquivo = 'produtos_hardware') {
+export default function salvarCsv(produtos, nomeArquivo = 'historico') {
     if (!produtos || produtos.length === 0) {
         console.log('⚠️ Nenhum produto para salvar');
         return;
