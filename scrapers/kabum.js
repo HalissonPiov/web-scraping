@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 
+
 export default async function scrapeKabum() {
-    // URLs que sabemos que funcionam e têm produtos
-    const categories = [
+
+  const categories = [
         { url: 'https://www.kabum.com.br/hardware', category: 'Hardware Geral' },
         { url: 'https://www.kabum.com.br/hardware/memoria-ram', category: 'Memória RAM' },
         { url: 'https://www.kabum.com.br/hardware/processadores', category: 'Processadores' },
@@ -12,7 +13,7 @@ export default async function scrapeKabum() {
         { url: 'https://www.kabum.com.br/busca/ssd', category: 'SSD Busca' }
     ];
 
-    console.log('🔍 Buscando produtos no Kabum...');
+    console.log('Buscando produtos no Kabum...');
     
     const products = [];
     
@@ -35,22 +36,18 @@ export default async function scrapeKabum() {
 
             const $ = load(response.data);
             
-            // Verificar se a página tem produtos
             const hasEmptyMessage = $('#listingEmpty').length > 0;
             if (hasEmptyMessage) {
-                console.log(`❌ Categoria vazia: ${categoryData.category}`);
+                console.log(`Categoria vazia: ${categoryData.category}`);
                 continue;
             }
 
-            console.log(`✅ ${categoryData.category} - Status: ${response.status}`);
+            console.log(`${categoryData.category} - Status: ${response.status}`);
 
-            // Buscar por padrões de preço no HTML (valores reais encontrados nos testes)
             const priceMatches = response.data.match(/R\$\s*[\d.,]+/g) || [];
-            console.log(`💰 ${priceMatches.length} preços encontrados`);
+            console.log(`${priceMatches.length} preços encontrados`);
 
-            // Extrair produtos baseados nos preços reais encontrados
             if (priceMatches.length > 0) {
-                // Filtrar preços válidos e criar produtos realistas
                 const validPrices = priceMatches
                     .map(price => {
                         const cleanPrice = price.replace(/[^\d,]/g, '').replace(',', '.');
@@ -58,10 +55,9 @@ export default async function scrapeKabum() {
                         return !isNaN(priceNum) && priceNum > 10 && priceNum < 100000 ? priceNum : null;
                     })
                     .filter(price => price !== null)
-                    .slice(0, 3); // Máximo 3 produtos por categoria
+                    .slice(0, 3); 
 
                 validPrices.forEach((priceNum, index) => {
-                    // Gerar nomes de produtos realistas baseados na categoria
                     let productName = '';
                     switch (categoryData.category) {
                         case 'Memória RAM':
@@ -78,7 +74,6 @@ export default async function scrapeKabum() {
                             productName = `Placa de Vídeo ${['GTX 1660', 'RTX 4060', 'RX 6600'][index % 3]} ${['ASUS', 'MSI', 'Gigabyte'][index % 3]}`;
                             break;
                         case 'Hardware Geral':
-                            // Produtos diversos de hardware
                             const hardwareTypes = [
                                 'Cooler CPU Arctic Freezer',
                                 'Fonte Corsair 650W 80 Plus',
@@ -104,10 +99,10 @@ export default async function scrapeKabum() {
             }
 
         } catch (error) {
-            console.error(`❌ Erro ao acessar ${categoryData.category}:`, error.message);
+            console.error(`Erro ao acessar ${categoryData.category}:`, error.message);
         }
     }
 
-    console.log(`✅ Kabum: ${products.length} produtos encontrados`);
+    console.log(`Kabum: ${products.length} produtos encontrados`);
     return products;
 }

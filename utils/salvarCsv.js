@@ -7,15 +7,12 @@ export default function salvarCsv(produtos, nomeArquivo = 'historico') {
         return;
     }
 
-    // Garantir que tem a extensão .csv
     if (!nomeArquivo.endsWith('.csv')) {
         nomeArquivo += '.csv';
     }
 
-    // Criar cabeçalho CSV
     const headers = ['Nome', 'Preço', 'Site', 'Categoria', 'URL', 'Data'];
     
-    // Criar linhas CSV
     const linhas = produtos.map(produto => {
         const nome = (produto.name || produto.nome || 'N/A').replace(/"/g, '""');
         const preco = produto.price || produto.preco || 'N/A';
@@ -27,21 +24,18 @@ export default function salvarCsv(produtos, nomeArquivo = 'historico') {
         return `"${nome}","${preco}","${site}","${categoria}","${url}","${data}"`;
     });
 
-    // Juntar tudo
     const csvContent = [headers.join(','), ...linhas].join('\n');
 
-    // Salvar arquivo
     const outputPath = path.join('data', nomeArquivo);
     
-    // Criar diretório data se não existir
     if (!fs.existsSync('data')) {
         fs.mkdirSync('data');
     }
 
     fs.writeFileSync(outputPath, csvContent, 'utf8');
     
-    console.log(`✅ CSV salvo: ${outputPath}`);
-    console.log(`📄 ${produtos.length} produtos salvos`);
+    console.log(`CSV salvo: ${outputPath}`);
+    console.log(`${produtos.length} produtos salvos`);
     
     return outputPath;
 }

@@ -1,6 +1,6 @@
 # 🖥️ Rastreador de Preços de Hardware
 
-Aplicação de Web Scraping em Node.js para monitorar e registrar preços de componentes de hardware (como SSDs) nos sites **Kabum**, **Pichau** e **TerabyteShop**. Os dados são coletados automaticamente e salvos em um arquivo `.csv` para análise futura de variação de preços.
+Aplicação de Web Scraping em Node.js para monitorar e registrar preços de componentes de hardware (como SSDs, processadores e memória RAM) nos sites **Kabum** e **Mercado Livre**. Os dados são coletados automaticamente e salvos em um arquivo `.csv` para análise futura de variação de preços.
 
 ---
 

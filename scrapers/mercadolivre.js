@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { load } from 'cheerio';
 
-// Scraper para Mercado Livre - marketplace líder
+
 async function scrapeMercadoLivre() {
   try {
     console.log('Buscando produtos no Mercado Livre...');
@@ -28,13 +28,13 @@ async function scrapeMercadoLivre() {
         
         const resultado = await processarPaginaMercadoLivre(data);
         if (resultado.length > 0) {
-          console.log(`✅ Mercado Livre: ${resultado.length} produtos encontrados`);
+          console.log(`Mercado Livre: ${resultado.length} produtos encontrados`);
           return resultado;
         }
         
         await new Promise(resolve => setTimeout(resolve, 2000));
       } catch (error) {
-        console.log(`❌ Mercado Livre erro: ${error.message}`);
+        console.log(`Mercado Livre erro: ${error.message}`);
         continue;
       }
     }
@@ -51,7 +51,6 @@ async function processarPaginaMercadoLivre(data) {
   const produtos = [];
   const produtosUnicos = new Set();
 
-  // Mercado Livre - busca estratégica
   $('*').each((i, el) => {
     if (produtos.length >= 5) return false;
     
@@ -83,11 +82,11 @@ async function processarPaginaMercadoLivre(data) {
         if (nome && preco && !produtosUnicos.has(chaveUnica)) {
           produtosUnicos.add(chaveUnica);
           produtos.push({
-            name: nome.substring(0, 100),     // Mudado de 'nome' para 'name'
-            price: preco,                     // Mudado de 'preco' para 'price'
+            name: nome.substring(0, 100),     
+            price: preco,                     
             site: 'Mercado Livre',
-            category: 'Hardware',             // Adicionado category
-            url: link.startsWith('http') ? link : `https://mercadolivre.com.br${link}` // Mudado de 'link' para 'url'
+            category: 'Hardware',             
+            url: link.startsWith('http') ? link : `https://mercadolivre.com.br${link}` 
           });
         }
       }
